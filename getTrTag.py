@@ -6,9 +6,11 @@ rating_page = response.text
 
 soup = BeautifulSoup(rating_page, 'html.parser')
 
-# td를 받아 앞의 4개의 td를 td_tags에 저장(슬라이싱)
-# get td and store the previous 4 tds in td_tags
-td_tags = soup.select('td')[:4]
+print(soup.select('tr')[1])
+
+tr_tag = soup.select('tr')[1]
+td_tags = tr_tag.select('td')
+print(td_tags)
 
 for tag in td_tags:
     print(tag.get_text())
