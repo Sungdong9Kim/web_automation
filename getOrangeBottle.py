@@ -9,7 +9,9 @@ soup = BeautifulSoup(bottle_page, 'html.parser')
 
 wanted_list = soup.select('.branch > p.city')
 #wanted_list_with_p = wanted_list.select('p')
-
+name_list = []
+for city in wanted_list:
+    name_list.append(city)
 
 print(wanted_list)
 #print(wanted_list_with_p)
