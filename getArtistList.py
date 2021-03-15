@@ -18,4 +18,4 @@ for tag in soup.select('ul.popular__order li'):
     print(list(tag.stripped_strings))
     print(list(tag.stripped_strings)[1])
     popular_artists.append(list(tag.stripped_strings)[1])
-    print(popular_artists)
+print(popular_artists)
