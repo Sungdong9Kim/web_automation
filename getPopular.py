@@ -19,3 +19,10 @@ for tag in soup.select('ul.rank__order'):
 
 # 출력 코드
 print(popular_searches)
+
+popular_searches2 = []
+for tag in soup.select('ul.rank__order li'):
+    search_word = list(tag.stripped_strings)[2]
+    popular_searches2.append(search_word)
+
+print(popular_searches2)
