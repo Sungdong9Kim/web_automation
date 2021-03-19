@@ -1,5 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+from openpyxl import Workbook
+
+wb = Workbook(write_only=True)
+ws = wb.create_sheet()
+ws.append(['지점 이름', '주소', '전화번호'])
 
 # HTML 코드 받아오기
 response = requests.get("https://workey.codeit.kr/orangebottle/index")
@@ -18,6 +23,8 @@ for branch_tag in branch_tags:
     address = branch_tag.select_one('p.address').get_text()
     phone_number = branch_tag.select_one('span.phoneNum').get_text()
     branch_infos.append([branch_name, address, phone_number])
+    ws.append([branch_name, address, phone_number])
 
 # 출력 코드
 print(branch_infos)
+wb.save('꿈의_직장_전화번호.xlsx')
