@@ -5,9 +5,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-wb = Workbook(write_only=True)
-ws = wb.create_sheet('코스타그램 정보')
-ws.append([''])
+# wb = Workbook(write_only=True)
+# ws = wb.create_sheet('코스타그램 정보')
+# ws.append([''])
 
 driver = webdriver.Chrome()
 
@@ -39,5 +39,15 @@ while True:
         break
     last_height = new_height
 
-photo_click = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.post-list__post post')))
-photo_click.click()
+
+posts = driver.find_elements_by_css_selector('post-list__post post')
+
+for post in posts:
+    post.click()
+    time.sleep(0.5)
+
+    driver.find_element_by_css_selector('.close-btn').click()
+    time.sleep(0.5)
+
+driver.quit()
+
