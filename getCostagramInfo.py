@@ -1,32 +1,24 @@
 import time
 from selenium import webdriver
-from openpyxl import Workbook
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-# wb = Workbook(write_only=True)
-# ws = wb.create_sheet('코스타그램 정보')
-# ws.append([''])
-
+# 웹 드라이버 설정
 driver = webdriver.Chrome()
+driver.implicitly_wait(3)
 
 driver.get('https://workey.codeit.kr/costagram/index')
+time.sleep(1)
 
-wait = WebDriverWait(driver, 3)
+# 로그인
+driver.find_element_by_css_selector('.top-nav__login-link').click()
+time.sleep(1)
 
-login_link = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.top-nav__login-link')))
-login_link.click()
+driver.find_element_by_css_selector('.login-container__login-input').send_keys('codeit')
+driver.find_element_by_css_selector('.login-container__password-input').send_keys('datascience')
 
-id_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.login-container__login-input')))
-id_box.send_keys('codeit')
+driver.find_element_by_css_selector('.login-container__login-button').click()
+time.sleep(1)
 
-pw_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.login-container__password-input')))
-pw_box.send_keys('datascience')
-
-login_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.login-container__login-button')))
-login_button.click()
-
+# 페이지 끝까지 스크롤
 last_height = driver.execute_script("return document.body.scrollHeight")
 
 while True:
@@ -39,15 +31,21 @@ while True:
         break
     last_height = new_height
 
-
-posts = driver.find_elements_by_css_selector('post-list__post post')
+# 모든 썸네일 요소 가져오기
+posts = driver.find_elements_by_css_selector('.post-list__post')
 
 for post in posts:
+    # 썸네일 클릭
     post.click()
     time.sleep(0.5)
 
+    # 이미지 주소 가져오기
+    style_attr = driver.find_element_by_css_selector('.post-container__image').get_attribute('style')
+    image_url = style_attr.split('"')[1]
+    print(image_url)
+
+    # 닫기 버튼 클릭
     driver.find_element_by_css_selector('.close-btn').click()
     time.sleep(0.5)
 
 driver.quit()
-
