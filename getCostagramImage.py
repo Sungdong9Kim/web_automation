@@ -1,6 +1,11 @@
 import time
 import requests
 from selenium import webdriver
+from openpyxl import Workbook
+
+wb = Workbook(write_only=True)
+ws = wb. create_sheet('이미지 주소')
+ws.append(['내용', '해시태그', '좋아요 수', '댓글 수'])
 
 # 웹 드라이버 설정
 driver = webdriver.Chrome()
