@@ -4,8 +4,8 @@ from selenium import webdriver
 from openpyxl import Workbook
 
 wb = Workbook(write_only=True)
-ws = wb. create_sheet('이미지 주소')
-ws.append(['내용', '해시태그', '좋아요 수', '댓글 수'])
+ws = wb. create_sheet('코스타그램 정보')
+ws.append(['이미지 주소', '내용', '해시태그', '좋아요 수', '댓글 수'])
 
 # 웹 드라이버 설정
 driver = webdriver.Chrome()
@@ -40,7 +40,7 @@ while True:
 # 모든 썸네일 요소 가져오기
 posts = driver.find_elements_by_css_selector('.post-list__post')
 
-image_urls = []
+# image_urls = []
 
 for post in posts:
     # 썸네일 클릭
@@ -51,7 +51,13 @@ for post in posts:
     style_attr = driver.find_element_by_css_selector('.post-container__image').get_attribute('style')
     image_path = style_attr.split('"')[1]
     image_url = "https://workey.codeit.kr" + image_path
-    image_urls.append(image_url)
+#   image_urls.append(image_url)
+    content = driver.find_element_by_css_selector('.content__text').text
+    hashtag = driver.find_element_by_css_selector('.content__tag-cover').text
+    like_number = driver.find_element_by_css_selector('.content__like-count').text
+    reply_number = driver.find_element_by_css_selector('.content__comment-count').text
+
+    ws.append([image_url, content, hashtag, like_number, reply_number])
 
     # 닫기 버튼 클릭
     driver.find_element_by_css_selector('.close-btn').click()
@@ -59,10 +65,12 @@ for post in posts:
 
 driver.quit()
 
-# 이미지 다운로드
-for i in range(len(image_urls)):
-    image_url = image_urls[i]
-    response = requests.get(image_url)
-    filename = 'image{}.jpg'.format(i)
-    with open(filename, 'wb+') as f:
-        f.write(response.content)
+wb.save('코스타그램.xlsx')
+
+# # 이미지 다운로드
+# for i in range(len(image_urls)):
+#     image_url = image_urls[i]
+#     response = requests.get(image_url)
+#     filename = 'image{}.jpg'.format(i)
+#     with open(filename, 'wb+') as f:
+#         f.write(response.content)
